@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Review } from './entity/review.entity';
 import { CompanyInfo } from '../company-info/entities/company-info.entity';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
