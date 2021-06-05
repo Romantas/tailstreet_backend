@@ -18,13 +18,17 @@ export class UsersService {
   private salt = bcrypt.genSaltSync(10);
 
   async login(loginUserDto: any): Promise<any> {
+    const hash = await bcrypt.hash(loginUserDto.password, this.salt);
+    console.log(loginUserDto);
     const user = await this.userRepository.findOne({
       where: {
         email: loginUserDto.email,
-        password: loginUserDto.password,
+        password: hash,
       },
       include: [{ model: CompanyInfo }],
     });
+
+    console.log(user);
 
     const payload = { email: user.email, userId: user.id, role: user.role };
 
