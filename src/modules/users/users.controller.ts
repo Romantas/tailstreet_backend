@@ -19,13 +19,8 @@ export class UsersController {
     return this.usersService.findOneById(+id);
   }
 
-  @Post('login')
-  userLogin(@Body() loginUserDto: any) {
-    return this.usersService.userLogin(loginUserDto);
-  }
-
   @Post('company/login')
-  login(@Body() loginUserDto: any) {
+  companyLogin(@Body() loginUserDto: any) {
     return this.usersService.login(loginUserDto);
   }
 

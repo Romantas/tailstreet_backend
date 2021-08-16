@@ -1,52 +1,38 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-  HasMany,
-  BelongsToMany,
-} from 'sequelize-typescript';
-
 import { CompanyInfo } from 'src/modules/company-info/entities/company-info.entity';
-import { EmployeeWork } from './EmployeeWork.entity';
-import { Service } from '../../services/entities/service.entity';
-import { EmployeeService } from '../../../core/database/many-to-many/EmployeeService';
+import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
+import {
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { EmployeeSchedule } from './EmployeeSchedule.entity';
 
-@Table
-export class Employee extends Model<Employee> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+@Entity()
+export class Employee extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column()
   lastName: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column({ nullable: true })
   experience: string;
 
-  @ForeignKey(() => CompanyInfo)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  companyId: number;
+  @ManyToOne(() => CompanyInfo, (companyInfo) => companyInfo.employees)
+  company: CompanyInfo;
 
-  @BelongsTo(() => CompanyInfo)
-  companyInfo: CompanyInfo;
+  @ManyToOne(() => Reservation, (reservation) => reservation.employee)
+  reservations: Reservation[];
 
-  @BelongsToMany(() => Service, () => EmployeeService)
-  services: Service[];
-
-  @HasMany(() => EmployeeWork)
-  employeeWorks: EmployeeWork[];
+  @OneToMany(
+    () => EmployeeSchedule,
+    (employeeSchedule) => employeeSchedule.employee,
+  )
+  employeeSchedule: EmployeeSchedule[];
 }

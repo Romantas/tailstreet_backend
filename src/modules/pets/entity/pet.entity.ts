@@ -1,78 +1,60 @@
+import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
 import {
-  BelongsTo,
+  BaseEntity,
   Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-  HasMany,
-} from 'sequelize-typescript';
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { User } from '../../users/entity/user.entity';
 import { Chip } from './Chip.entity';
 import { Tattoo } from './Tattoo.entity';
 import { Vaccination } from './Vaccination.entity';
 
-@Table
-export class Pet extends Model<Pet> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+@Entity()
+export class Pet extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
 
-  @Column({
-    type: DataType.TEXT,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   species: string;
 
-  @Column({
-    type: DataType.DATE,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   birthday: Date;
 
-  @Column({
-    type: DataType.TEXT,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   breed: string;
 
-  @Column({
-    type: DataType.TEXT,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   sex: string;
 
-  @Column({
-    type: DataType.TEXT,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   color: string;
 
-  @Column({
-    type: DataType.TEXT,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   photo: string;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  userId: number;
-
-  @BelongsTo(() => User)
+  @ManyToOne(() => User, (user) => user.pets)
   user: User;
 
-  @HasMany(() => Chip)
-  chips: Chip[];
+  @OneToOne(() => Chip)
+  @JoinColumn()
+  chip: Chip;
 
-  @HasMany(() => Tattoo)
-  tattoos: Tattoo[];
+  @OneToOne(() => Tattoo)
+  @JoinColumn()
+  tattoo: Tattoo;
 
-  @HasMany(() => Vaccination)
+  @OneToMany(() => Vaccination, (vaccination) => vaccination.pet)
   vaccinations: Vaccination[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.pet)
+  reservations: Reservation[];
 }

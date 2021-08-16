@@ -1,21 +1,15 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Chip } from './entity/Chip.entity';
+import { Pet } from './entity/pet.entity';
+import { Tattoo } from './entity/Tattoo.entity';
+import { Vaccination } from './entity/Vaccination.entity';
 import { PetsController } from './pets.controller';
 import { PetsService } from './pets.service';
-import {
-  chipProviders,
-  petsProviders,
-  TattooProviders,
-  vaccinationProviders,
-} from './pets.providers';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Pet, Tattoo, Chip, Vaccination])],
   controllers: [PetsController],
-  providers: [
-    PetsService,
-    ...petsProviders,
-    ...vaccinationProviders,
-    ...chipProviders,
-    ...TattooProviders,
-  ],
+  providers: [PetsService],
 })
 export class PetsModule {}

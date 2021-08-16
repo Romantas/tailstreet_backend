@@ -1,52 +1,42 @@
-import {
-  Column,
-  DataType,
-  Model,
-  Table,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript';
-
 import { User } from '../../users/entity/user.entity';
 import { Service } from '../../services/entities/service.entity';
+import {
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  Entity,
+  Column,
+  ManyToOne,
+} from 'typeorm';
+import { CompanyInfo } from 'src/modules/company-info/entities/company-info.entity';
+import { Employee } from 'src/modules/employees/entities/employee.entity';
+import { Pet } from 'src/modules/pets/entity/pet.entity';
 
-@Table
-export class Reservation extends Model<Reservation> {
-  @Column({
-    type: DataType.DATE,
-    allowNull: false,
-  })
+@Entity()
+export class Reservation extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   date: Date;
 
-  @Column({
-    type: DataType.TIME,
-    allowNull: false,
-  })
+  @Column()
   time: Date;
 
-  @Column({
-    type: DataType.TINYINT,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   accepted: boolean;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  userId: number;
-
-  @BelongsTo(() => User)
+  @ManyToOne(() => User, (user) => user.reservations)
   user: User;
 
-  @ForeignKey(() => Service)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  serviceId: number;
-
-  @BelongsTo(() => Service)
+  @ManyToOne(() => Service, (service) => service.reservations)
   service: Service;
+
+  @ManyToOne(() => CompanyInfo, (companyInfo) => companyInfo.reservations)
+  company: CompanyInfo;
+
+  @ManyToOne(() => Employee, (employee) => employee.reservations)
+  employee: Employee;
+
+  @ManyToOne(() => Pet, (pet) => pet.reservations)
+  pet: Pet;
 }

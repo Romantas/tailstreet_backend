@@ -1,35 +1,15 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Pet } from './pet.entity';
 
-@Table
-export class Tattoo extends Model<Tattoo> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+@Entity()
+export class Tattoo extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   tattooNumber: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column()
   tattooPlace: string;
-
-  @ForeignKey(() => Pet)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  petId: number;
-
-  @BelongsTo(() => Pet)
-  pet: Pet;
 }

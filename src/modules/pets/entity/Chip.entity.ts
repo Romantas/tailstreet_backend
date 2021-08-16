@@ -1,35 +1,21 @@
 import {
-  BelongsTo,
+  BaseEntity,
   Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { Pet } from './pet.entity';
 
-@Table
-export class Chip extends Model<Chip> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+@Entity()
+export class Chip extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   chipNumber: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column()
   chipPlace: string;
-
-  @ForeignKey(() => Pet)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  petId: number;
-
-  @BelongsTo(() => Pet)
-  pet: Pet;
 }

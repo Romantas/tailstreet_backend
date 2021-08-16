@@ -1,63 +1,51 @@
+import { Employee } from 'src/modules/employees/entities/employee.entity';
+import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
+import { Service } from 'src/modules/services/entities/service.entity';
+import { Review } from 'src/modules/users/entity/review.entity';
+import { User } from 'src/modules/users/entity/user.entity';
 import {
-  BelongsTo,
+  BaseEntity,
   Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-  HasMany,
-} from 'sequelize-typescript';
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import { User } from '../../users/entity/user.entity';
+@Entity()
+export class CompanyInfo extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-import { Service } from '../../services/entities/service.entity';
-import { Employee } from '../../employees/entities/employee.entity';
-import { Review } from '../../users/entity/review.entity';
-
-@Table
-export class CompanyInfo extends Model<CompanyInfo> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column()
   name: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+
+  @Column()
   image: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+
+  @Column()
   description: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+
+  @Column()
   city: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+
+  @Column()
   address: string;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  userId: number;
-
-  @BelongsTo(() => User)
+  @OneToOne(() => User)
+  @JoinColumn()
   user: User;
 
-  @HasMany(() => Service)
+  @OneToMany(() => Service, (service) => service.company)
   services: Service[];
 
-  @HasMany(() => Employee)
+  @OneToMany(() => Employee, (employee) => employee.company)
   employees: Employee[];
 
-  @HasMany(() => Review)
-  review: Review[];
+  @OneToMany(() => Review, (review) => review.company)
+  reviews: Review[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.company)
+  reservations: Reservation[];
 }

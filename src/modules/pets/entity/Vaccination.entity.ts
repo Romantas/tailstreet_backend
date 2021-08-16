@@ -1,41 +1,27 @@
 import {
-  BelongsTo,
+  BaseEntity,
+  Entity,
   Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { Pet } from './pet.entity';
 
-@Table
-export class Vaccination extends Model<Vaccination> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  vaccinationManufactor: string;
+@Entity()
+export class Vaccination extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column()
+  vaccinationManufacture: string;
+
+  @Column()
   bachNumber: string;
 
-  @Column({
-    type: DataType.DATE,
-    allowNull: false,
-  })
+  @Column()
   validUntil: Date;
 
-  @ForeignKey(() => Pet)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
-  petId: number;
-
-  @BelongsTo(() => Pet)
+  @ManyToOne(() => Pet, (pet) => pet.vaccinations)
   pet: Pet;
 }

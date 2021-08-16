@@ -6,10 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 import { PetsService } from './pets.service';
 
@@ -17,9 +20,11 @@ import { PetsService } from './pets.service';
 export class PetsController {
   constructor(private readonly petsService: PetsService) {}
 
-  @Get(':id')
-  findAllByUserId(@Param('id') id: string) {
-    return this.petsService.findAllByUserId(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  findAllByUserId(@Request() req) {
+    console.log(req.user);
+    return this.petsService.findAllByUserId(1);
   }
 
   @Post()

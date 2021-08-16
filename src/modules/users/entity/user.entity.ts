@@ -1,65 +1,56 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  HasMany,
-  HasOne,
-} from 'sequelize-typescript';
 import { CompanyInfo } from 'src/modules/company-info/entities/company-info.entity';
 import { Reservation } from 'src/modules/reservations/entities/reservation.entity';
 import { Pet } from '../../pets/entity/pet.entity';
 
 import { Review } from './review.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Table
-export class User extends Model<User> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+enum Role {
+  USER = 1,
+  COMPANY = 2,
+  ADMIN = 3,
+}
+@Entity()
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+  @Column()
   lastName: string;
 
-  @Column({
-    type: DataType.STRING,
-    unique: true,
-    allowNull: false,
-  })
+  @Column()
   email: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @Column()
   password: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
+  @Column({ nullable: true })
   phone: string;
 
-  @Column({
-    type: DataType.TINYINT,
-    allowNull: false,
-  })
-  role: string;
+  @Column()
+  role: Role;
 
-  @HasMany(() => Review)
+  @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
 
-  @HasMany(() => Reservation)
+  @OneToMany(() => Reservation, (reservation) => reservation.user)
   reservations: Reservation[];
 
-  @HasMany(() => Pet)
+  @OneToMany(() => Pet, (pet) => pet.user)
   pets: Pet[];
 
-  @HasOne(() => CompanyInfo)
+  @OneToOne(() => CompanyInfo)
+  @JoinColumn()
   company: CompanyInfo;
 }

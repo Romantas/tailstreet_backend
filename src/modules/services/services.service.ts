@@ -3,41 +3,43 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { Service } from './entities/service.entity';
 import { cities, addresses } from '../../utils/addresses';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ServicesService {
   constructor(
-    @Inject('SERVICE_REPOSITORY')
-    private servicesRepository: typeof Service,
+    @InjectRepository(Service)
+    private readonly serviceRepository: Repository<Service>,
   ) {}
   async create(createServiceDto: any) {
-    return this.servicesRepository.create(createServiceDto);
+    // return this.servicesRepository.create(createServiceDto);
   }
 
   async findAll() {
-    return this.servicesRepository.findAll({
-      attributes: ['title'],
-      group: ['title'],
-      order: [['title', 'ASC']],
-    });
+    // return this.servicesRepository.findAll({
+    //   attributes: ['title'],
+    //   group: ['title'],
+    //   order: [['title', 'ASC']],
+    // });
   }
 
   findByCompanyId(id: number) {
-    return this.servicesRepository.findAll({ where: { companyId: id } });
+    // return this.servicesRepository.findAll({ where: { companyId: id } });
   }
 
   createByCompanyId(id: number, data) {
-    return this.servicesRepository.create({ ...data, companyId: id });
+    // return this.servicesRepository.create({ ...data, companyId: id });
   }
 
   update(id: number, updateServiceDto: UpdateServiceDto) {
-    return this.servicesRepository.update(updateServiceDto, {
-      where: { id: id },
-    });
+    // return this.servicesRepository.update(updateServiceDto, {
+    //   where: { id: id },
+    // });
   }
 
   remove(id: number) {
-    return this.servicesRepository.destroy({ where: { id: id } });
+    // return this.servicesRepository.destroy({ where: { id: id } });
   }
 
   getCities() {
